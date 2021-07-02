@@ -13,42 +13,42 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.apirest.bibliotecavirtual.models.AutorModel;
-import com.apirest.bibliotecavirtual.repository.AutorRepository;
+import com.apirest.bibliotecavirtual.models.EditoraModel;
+import com.apirest.bibliotecavirtual.repository.EditoraRepository;
 
 @RestController
-@RequestMapping("/autor")
-public class AutorController {
-
+@RequestMapping("/editora")
+public class EditoraController {
+	
 	@Autowired
-	private AutorRepository autorRepository;
+	private EditoraRepository editoraRepository;
 
 	@GetMapping()
-	public List<AutorModel> obterAutores() {
-		return autorRepository.findAll();
+	public List<EditoraModel> obterEditora() {
+		return editoraRepository.findAll();
 	}
 
 	@GetMapping("/{id}")
-	public Optional<AutorModel> autorId(@PathVariable(value = "id") Long id) {
-		return autorRepository.findById(id);
+	public Optional<EditoraModel> EditoraId(@PathVariable(value = "id") Long id) {
+		return editoraRepository.findById(id);
 	}
 
 	@PutMapping
 	@RequestMapping("/alterar")
-	public AutorModel alterarAutor(@RequestBody AutorModel autor) {
-		return autorRepository.save(autor);
+	public EditoraModel alterarEditora(@RequestBody EditoraModel editora) {
+		return editoraRepository.save(editora);
 	}
 
 	@PostMapping
 	@RequestMapping("/salvar")
-	public AutorModel salvarAutor(@RequestBody AutorModel autor) {
-		return autorRepository.save(autor);
+	public EditoraModel salvarEditora(@RequestBody EditoraModel editora) {
+		return editoraRepository.save(editora);
 	}
 
 	@DeleteMapping
 	@RequestMapping("/delete")
-	public void deletarAutorPorId(@RequestBody AutorModel autor) {
-		autorRepository.delete(autor);
+	public void deletarEditoraPorId(@RequestBody EditoraModel editora) {
+		editoraRepository.delete(editora);
 	}
 
 }

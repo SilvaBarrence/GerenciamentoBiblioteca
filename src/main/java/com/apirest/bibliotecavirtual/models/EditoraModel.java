@@ -7,13 +7,13 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="EDITORAS")
+@Table(name = "EDITORAS")
 public class EditoraModel {
 
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String nome;
-	
 
 	@Override
 	public int hashCode() {
@@ -56,10 +56,6 @@ public class EditoraModel {
 
 	public Long getId() {
 		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 }
