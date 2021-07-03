@@ -17,7 +17,7 @@ import com.apirest.bibliotecavirtual.models.LivroModel;
 import com.apirest.bibliotecavirtual.repository.livroRepository;
 
 @RestController
-@RequestMapping("/livro")
+@RequestMapping("/v1/livro")
 public class LivroController {
 
 	@Autowired
@@ -28,15 +28,27 @@ public class LivroController {
 		return livroRepository.findAll();
 	}
 
+	@GetMapping
+	@RequestMapping("/busca/autor")
+	public List<LivroModel> obterLivroPorAutor(String nomeAutor) {
+		return livroRepository.findByAutor(nomeAutor);
+	}
+
+	@GetMapping
+	@RequestMapping("/busca/editora")
+	public List<LivroModel> obterLivroPorEditora(String nomeEditora) {
+		return livroRepository.findByEditora(nomeEditora);
+	}
+
 	@GetMapping("/{id}")
 	public Optional<LivroModel> obterLivroId(@PathVariable(value = "id") Long id) {
 		return livroRepository.findById(id);
 	}
-	
+
 	@GetMapping
-	@RequestMapping("/busca")
-	public List<LivroModel> obterLivroTitulo(String nomeLivro) {
-		return livroRepository.findByTitulo(nomeLivro);
+	@RequestMapping("/busca/titulo")
+	public List<LivroModel> obterLivroTitulo(String tituloLivro) {
+		return livroRepository.findByTitulo(tituloLivro);
 	}
 
 	@PutMapping
@@ -53,7 +65,13 @@ public class LivroController {
 
 	@DeleteMapping
 	@RequestMapping("/delete")
-	public void deletarEditoraPorId(@RequestBody LivroModel livro) {
-		livroRepository.delete(livro);
+	public void deletarEditoraPorId(@RequestBody LivroModel id) {
+		livroRepository.delete(id);
+	}
+
+	@DeleteMapping
+	@RequestMapping("/delete/titulo")
+	public void deletarEditoraPorTitulo(@RequestBody LivroModel titulo) {
+		livroRepository.delete(titulo);
 	}
 }

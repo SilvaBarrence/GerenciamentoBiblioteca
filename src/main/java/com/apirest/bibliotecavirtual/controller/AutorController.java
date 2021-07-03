@@ -17,7 +17,7 @@ import com.apirest.bibliotecavirtual.models.AutorModel;
 import com.apirest.bibliotecavirtual.repository.AutorRepository;
 
 @RestController
-@RequestMapping("/autor")
+@RequestMapping("/v1/autor")
 public class AutorController {
 
 	@Autowired

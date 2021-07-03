@@ -17,7 +17,7 @@ import com.apirest.bibliotecavirtual.models.EditoraModel;
 import com.apirest.bibliotecavirtual.repository.EditoraRepository;
 
 @RestController
-@RequestMapping("/editora")
+@RequestMapping("/v1/editora")
 public class EditoraController {
 	
 	@Autowired
