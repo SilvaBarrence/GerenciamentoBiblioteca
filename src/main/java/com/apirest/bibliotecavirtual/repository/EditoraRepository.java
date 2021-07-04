@@ -9,4 +9,5 @@ import com.apirest.bibliotecavirtual.models.EditoraModel;
 public interface EditoraRepository extends JpaRepository<EditoraModel, Long> {
 
 	Optional<EditoraModel> findById(Long id);
+
 }

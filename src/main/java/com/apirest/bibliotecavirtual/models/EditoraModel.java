@@ -17,14 +17,14 @@ public class EditoraModel {
 	private Long id;
 	
 	@NotNull @NotEmpty
-	private String nomeEditora;
+	private String nome;
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((nomeEditora == null) ? 0 : nomeEditora.hashCode());
+		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
 		return result;
 	}
 
@@ -42,20 +42,20 @@ public class EditoraModel {
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		if (nomeEditora == null) {
-			if (other.nomeEditora != null)
+		if (nome == null) {
+			if (other.nome != null)
 				return false;
-		} else if (!nomeEditora.equals(other.nomeEditora))
+		} else if (!nome.equals(other.nome))
 			return false;
 		return true;
 	}
 
 	public String getNome() {
-		return nomeEditora;
+		return nome;
 	}
 
 	public void setNome(String nome) {
-		this.nomeEditora = nome;
+		this.nome = nome;
 	}
 
 	public Long getId() {

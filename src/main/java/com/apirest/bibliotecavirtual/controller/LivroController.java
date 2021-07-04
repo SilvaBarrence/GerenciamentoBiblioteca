@@ -19,13 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.apirest.bibliotecavirtual.controller.Dto.AtualizarLivroDto;
 import com.apirest.bibliotecavirtual.controller.Dto.LivroDto;
-import com.apirest.bibliotecavirtual.models.AutorModel;
-import com.apirest.bibliotecavirtual.models.EditoraModel;
 import com.apirest.bibliotecavirtual.models.LivroModel;
-import com.apirest.bibliotecavirtual.repository.AutorRepository;
-import com.apirest.bibliotecavirtual.repository.EditoraRepository;
 import com.apirest.bibliotecavirtual.repository.LivroRepository;
 
 @RestController
@@ -34,12 +29,6 @@ public class LivroController {
 
 	@Autowired
 	private LivroRepository livroRepository;
-	
-	@Autowired
-	private AutorRepository autorRepository;
-	
-	@Autowired
-	private EditoraRepository editoraRepository;
 
 	@GetMapping
 	public List<LivroModel> obterLivros() {
@@ -54,11 +43,12 @@ public class LivroController {
 	@GetMapping("/busca/editora/{editora}")
 	public List<LivroModel> obterLivroPorEditora(@PathVariable String editora) {
 		return livroRepository.findByEditora(editora);
+		
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<LivroModel> obterLivroId(@PathVariable Long id) {
-		Optional<LivroModel> optional =  livroRepository.findById(id);
+		Optional<LivroModel> optional = livroRepository.findById(id);
 		if (optional.isPresent()) {
 			return ResponseEntity.ok(optional.get());
 		} else {
@@ -78,12 +68,12 @@ public class LivroController {
 
 	@PutMapping("/alterar/{id}")
 	@Transactional
-	public ResponseEntity<LivroDto> alterarLivro(@PathVariable long id,
-			@RequestBody @Valid AtualizarLivroDto atualizaLivro) {
+	public ResponseEntity<LivroModel> alterarLivro(@PathVariable long id,
+			@RequestBody @Valid LivroDto atualizaLivro) {
 		Optional<LivroModel> optional = livroRepository.findById(id);
 		if (optional.isPresent()) {
 			LivroModel livroAtualizado = atualizaLivro.atualizar(id, livroRepository);
-			return ResponseEntity.ok(new LivroDto(livroAtualizado));
+			return ResponseEntity.ok(livroAtualizado);
 		} else {
 			return ResponseEntity.notFound().build();
 		}
@@ -91,10 +81,8 @@ public class LivroController {
 
 	@PostMapping("/salvar")
 	@Transactional
-	public ResponseEntity<LivroModel> salvarLivro(@RequestBody @Valid LivroModel livro, AutorModel nome, EditoraModel nomeEditora ,UriComponentsBuilder builder) {
+	public ResponseEntity<LivroModel> salvarLivro(@RequestBody @Valid LivroModel livro, UriComponentsBuilder builder) {
 		livroRepository.save(livro);
-//		autorRepository.save(autor);
-//		editoraRepository.save(nomeEditora);
 		URI uri = builder.path("/v1/livro/salvar/{id}").buildAndExpand(livro.getId()).toUri();
 		return ResponseEntity.created(uri).body(livro);
 	}
