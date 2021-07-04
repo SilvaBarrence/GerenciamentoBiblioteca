@@ -1,9 +1,14 @@
 package com.apirest.bibliotecavirtual.controller;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,66 +17,108 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import com.apirest.bibliotecavirtual.controller.Dto.AtualizarLivroDto;
+import com.apirest.bibliotecavirtual.controller.Dto.LivroDto;
+import com.apirest.bibliotecavirtual.models.AutorModel;
+import com.apirest.bibliotecavirtual.models.EditoraModel;
 import com.apirest.bibliotecavirtual.models.LivroModel;
-import com.apirest.bibliotecavirtual.repository.livroRepository;
+import com.apirest.bibliotecavirtual.repository.AutorRepository;
+import com.apirest.bibliotecavirtual.repository.EditoraRepository;
+import com.apirest.bibliotecavirtual.repository.LivroRepository;
 
 @RestController
 @RequestMapping("/v1/livro")
 public class LivroController {
 
 	@Autowired
-	private livroRepository livroRepository;
+	private LivroRepository livroRepository;
+	
+	@Autowired
+	private AutorRepository autorRepository;
+	
+	@Autowired
+	private EditoraRepository editoraRepository;
 
 	@GetMapping
 	public List<LivroModel> obterLivros() {
 		return livroRepository.findAll();
 	}
 
-	@GetMapping
-	@RequestMapping("/busca/autor")
-	public List<LivroModel> obterLivroPorAutor(String nomeAutor) {
-		return livroRepository.findByAutor(nomeAutor);
+	@GetMapping("/busca/autor/{autor}")
+	public List<LivroModel> obterLivroPorAutor(@PathVariable String autor) {
+		return livroRepository.findByAutor(autor);
 	}
 
-	@GetMapping
-	@RequestMapping("/busca/editora")
-	public List<LivroModel> obterLivroPorEditora(String nomeEditora) {
-		return livroRepository.findByEditora(nomeEditora);
+	@GetMapping("/busca/editora/{editora}")
+	public List<LivroModel> obterLivroPorEditora(@PathVariable String editora) {
+		return livroRepository.findByEditora(editora);
 	}
 
 	@GetMapping("/{id}")
-	public Optional<LivroModel> obterLivroId(@PathVariable(value = "id") Long id) {
-		return livroRepository.findById(id);
+	public ResponseEntity<LivroModel> obterLivroId(@PathVariable Long id) {
+		Optional<LivroModel> optional =  livroRepository.findById(id);
+		if (optional.isPresent()) {
+			return ResponseEntity.ok(optional.get());
+		} else {
+			return ResponseEntity.notFound().build();
+		}
 	}
 
-	@GetMapping
-	@RequestMapping("/busca/titulo")
-	public List<LivroModel> obterLivroTitulo(String tituloLivro) {
-		return livroRepository.findByTitulo(tituloLivro);
+	@GetMapping("/busca/titulo/{titulo}")
+	public ResponseEntity<LivroModel> obterLivroTitulo(@PathVariable String titulo) {
+		Optional<LivroModel> optional = livroRepository.findByTitulo(titulo);
+		if (optional.isPresent()) {
+			return ResponseEntity.ok(optional.get());
+		} else {
+			return ResponseEntity.notFound().build();
+		}
 	}
 
-	@PutMapping
-	@RequestMapping("/alterar")
-	public LivroModel alterarLivro(@RequestBody LivroModel livro) {
-		return livroRepository.save(livro);
+	@PutMapping("/alterar/{id}")
+	@Transactional
+	public ResponseEntity<LivroDto> alterarLivro(@PathVariable long id,
+			@RequestBody @Valid AtualizarLivroDto atualizaLivro) {
+		Optional<LivroModel> optional = livroRepository.findById(id);
+		if (optional.isPresent()) {
+			LivroModel livroAtualizado = atualizaLivro.atualizar(id, livroRepository);
+			return ResponseEntity.ok(new LivroDto(livroAtualizado));
+		} else {
+			return ResponseEntity.notFound().build();
+		}
 	}
 
-	@PostMapping
-	@RequestMapping("/salvar")
-	public LivroModel salvarLivro(@RequestBody LivroModel livro) {
-		return livroRepository.save(livro);
+	@PostMapping("/salvar")
+	@Transactional
+	public ResponseEntity<LivroModel> salvarLivro(@RequestBody @Valid LivroModel livro, AutorModel nome, EditoraModel nomeEditora ,UriComponentsBuilder builder) {
+		livroRepository.save(livro);
+//		autorRepository.save(autor);
+//		editoraRepository.save(nomeEditora);
+		URI uri = builder.path("/v1/livro/salvar/{id}").buildAndExpand(livro.getId()).toUri();
+		return ResponseEntity.created(uri).body(livro);
 	}
 
-	@DeleteMapping
-	@RequestMapping("/delete")
-	public void deletarEditoraPorId(@RequestBody LivroModel id) {
-		livroRepository.delete(id);
+	@DeleteMapping("/delete/{id}")
+	public ResponseEntity<?> deletarLivroPorId(@PathVariable Long id) {
+		Optional<LivroModel> optional = livroRepository.findById(id);
+		if (optional.isPresent()) {
+			livroRepository.deleteById(id);
+			return ResponseEntity.ok().build();
+		} else {
+			return ResponseEntity.notFound().build();
+		}
 	}
 
-	@DeleteMapping
-	@RequestMapping("/delete/titulo")
-	public void deletarEditoraPorTitulo(@RequestBody LivroModel titulo) {
-		livroRepository.delete(titulo);
+	@DeleteMapping("/delete/titulo/{titulo}")
+	@Transactional
+	public ResponseEntity<?> deletarEditoraPorTitulo(@PathVariable String titulo) {
+		Optional<LivroModel> optional = livroRepository.findByTitulo(titulo);
+		if (optional.isPresent()) {
+			livroRepository.deleteByTitulo(titulo);
+			return ResponseEntity.ok().build();
+		} else {
+			return ResponseEntity.notFound().build();
+		}
 	}
 }

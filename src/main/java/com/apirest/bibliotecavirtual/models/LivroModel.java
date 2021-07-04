@@ -5,6 +5,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import com.apirest.bibliotecavirtual.repository.LivroRepository;
 
 @Entity
 @Table(name="LIVROS")
@@ -12,10 +16,15 @@ public class LivroModel {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String autor;
-	private String editora;
-	private String titulo;
 	
+	@NotNull @NotEmpty
+	private String autor;
+	
+	@NotNull @NotEmpty
+	private String editora;
+	
+	@NotNull @NotEmpty
+	private String titulo;
 
 	@Override
 	public int hashCode() {
@@ -87,5 +96,15 @@ public class LivroModel {
 	public Long getId() {
 		return id;
 	}
+	
+	public LivroModel atualizar(long id, LivroRepository livroRepository) {
+		LivroModel livro = livroRepository.getOne(id);
+		livro.setAutor(this.autor);
+		livro.setEditora(this.editora);
+		livro.setTitulo(this.titulo);
+
+		return livro;
+	}
+
 
 }

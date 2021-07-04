@@ -7,14 +7,16 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.apirest.bibliotecavirtual.models.LivroModel;
 
-public interface livroRepository extends JpaRepository<LivroModel, Long> {
+public interface LivroRepository extends JpaRepository<LivroModel, Long> {
 
 	Optional<LivroModel> findById(Long id);
 
-	List<LivroModel> findByTitulo(String tituloLivro);
+	Optional<LivroModel> findByTitulo(String tituloLivro);
 
 	List<LivroModel> findByAutor(String nomeAutor);
 
 	List<LivroModel> findByEditora(String nomeEditora);
+
+	List<LivroModel> deleteByTitulo(String titulo);
 
 }

@@ -5,6 +5,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "EDITORAS")
@@ -13,14 +15,16 @@ public class EditoraModel {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String nome;
+	
+	@NotNull @NotEmpty
+	private String nomeEditora;
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
+		result = prime * result + ((nomeEditora == null) ? 0 : nomeEditora.hashCode());
 		return result;
 	}
 
@@ -38,20 +42,20 @@ public class EditoraModel {
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		if (nome == null) {
-			if (other.nome != null)
+		if (nomeEditora == null) {
+			if (other.nomeEditora != null)
 				return false;
-		} else if (!nome.equals(other.nome))
+		} else if (!nomeEditora.equals(other.nomeEditora))
 			return false;
 		return true;
 	}
 
 	public String getNome() {
-		return nome;
+		return nomeEditora;
 	}
 
 	public void setNome(String nome) {
-		this.nome = nome;
+		this.nomeEditora = nome;
 	}
 
 	public Long getId() {
