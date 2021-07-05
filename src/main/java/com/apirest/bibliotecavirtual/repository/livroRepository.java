@@ -15,7 +15,7 @@ public interface LivroRepository extends JpaRepository<LivroModel, Long> {
 
 	List<LivroModel> findByAutor(String nomeAutor);
 
-	List<LivroModel> findByEditora(String nomeEditora);
+	List<LivroModel> findByEditoraNome(String editora);
 
 	List<LivroModel> deleteByTitulo(String titulo);
 

@@ -1,8 +1,10 @@
 package com.apirest.bibliotecavirtual.controller.Dto;
 
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import com.apirest.bibliotecavirtual.models.EditoraModel;
 import com.apirest.bibliotecavirtual.models.LivroModel;
 import com.apirest.bibliotecavirtual.repository.LivroRepository;
 
@@ -13,8 +15,8 @@ public class LivroDto {
 	private String autor;
 
 	@NotNull
-	@NotEmpty
-	private String editora;
+	@NotEmpty @ManyToOne
+	private EditoraModel editora;
 
 	@NotNull
 	@NotEmpty
@@ -28,11 +30,11 @@ public class LivroDto {
 		this.autor = autor;
 	}
 
-	public String getEditora() {
+	public EditoraModel getEditora() {
 		return editora;
 	}
 
-	public void setEditora(String editora) {
+	public void setEditora( EditoraModel editora) {
 		this.editora = editora;
 	}
 

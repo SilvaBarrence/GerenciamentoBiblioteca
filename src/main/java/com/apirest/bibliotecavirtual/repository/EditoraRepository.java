@@ -10,4 +10,6 @@ public interface EditoraRepository extends JpaRepository<EditoraModel, Long> {
 
 	Optional<EditoraModel> findById(Long id);
 
+	Optional<EditoraModel> save(String string);
+
 }

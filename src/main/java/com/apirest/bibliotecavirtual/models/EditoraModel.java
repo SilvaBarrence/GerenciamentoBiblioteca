@@ -54,8 +54,8 @@ public class EditoraModel {
 		return nome;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setNome( String editora) {
+		this.nome = editora;
 	}
 
 	public Long getId() {

@@ -21,6 +21,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.apirest.bibliotecavirtual.controller.Dto.LivroDto;
 import com.apirest.bibliotecavirtual.models.LivroModel;
+import com.apirest.bibliotecavirtual.repository.EditoraRepository;
 import com.apirest.bibliotecavirtual.repository.LivroRepository;
 
 @RestController
@@ -29,6 +30,10 @@ public class LivroController {
 
 	@Autowired
 	private LivroRepository livroRepository;
+	
+	@Autowired
+	private EditoraRepository editoraRepository;
+
 
 	@GetMapping
 	public List<LivroModel> obterLivros() {
@@ -42,8 +47,7 @@ public class LivroController {
 
 	@GetMapping("/busca/editora/{editora}")
 	public List<LivroModel> obterLivroPorEditora(@PathVariable String editora) {
-		return livroRepository.findByEditora(editora);
-		
+		return livroRepository.findByEditoraNome(editora);
 	}
 
 	@GetMapping("/{id}")
@@ -52,7 +56,7 @@ public class LivroController {
 		if (optional.isPresent()) {
 			return ResponseEntity.ok(optional.get());
 		} else {
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.notFound().build();	
 		}
 	}
 

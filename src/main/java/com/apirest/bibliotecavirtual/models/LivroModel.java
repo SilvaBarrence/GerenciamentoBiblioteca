@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -20,8 +21,8 @@ public class LivroModel {
 	@NotNull @NotEmpty
 	private String autor;
 	
-	@NotNull @NotEmpty
-	private String editora;
+	@NotNull @NotEmpty @ManyToOne
+	private  EditoraModel editora;
 	
 	@NotNull @NotEmpty
 	private String titulo;
@@ -77,11 +78,11 @@ public class LivroModel {
 		this.autor = autor;
 	}
 
-	public String getEditora() {
+	public EditoraModel getEditora() {
 		return editora;
 	}
 
-	public void setEditora(String editora) {
+	public void setEditora(EditoraModel editora) {
 		this.editora = editora;
 	}
 
