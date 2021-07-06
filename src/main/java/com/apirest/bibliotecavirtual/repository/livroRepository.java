@@ -19,4 +19,6 @@ public interface LivroRepository extends JpaRepository<LivroModel, Long> {
 
 	List<LivroModel> deleteByTitulo(String titulo);
 
+	List<LivroModel> findByAutorNome(String autor);
+
 }

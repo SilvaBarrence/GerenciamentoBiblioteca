@@ -4,6 +4,7 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import com.apirest.bibliotecavirtual.models.AutorModel;
 import com.apirest.bibliotecavirtual.models.EditoraModel;
 import com.apirest.bibliotecavirtual.models.LivroModel;
 import com.apirest.bibliotecavirtual.repository.LivroRepository;
@@ -12,21 +13,23 @@ public class LivroDto {
 
 	@NotNull
 	@NotEmpty
-	private String autor;
+	@ManyToOne
+	private AutorModel autor;
 
 	@NotNull
-	@NotEmpty @ManyToOne
+	@NotEmpty
+	@ManyToOne
 	private EditoraModel editora;
 
 	@NotNull
 	@NotEmpty
 	private String titulo;
 
-	public String getAutor() {
+	public AutorModel getAutor() {
 		return autor;
 	}
 
-	public void setAutor(String autor) {
+	public void setAutor(AutorModel autor) {
 		this.autor = autor;
 	}
 
@@ -34,7 +37,7 @@ public class LivroDto {
 		return editora;
 	}
 
-	public void setEditora( EditoraModel editora) {
+	public void setEditora(EditoraModel editora) {
 		this.editora = editora;
 	}
 
@@ -51,7 +54,6 @@ public class LivroDto {
 		livro.setAutor(this.autor);
 		livro.setEditora(this.editora);
 		livro.setTitulo(this.titulo);
-
 		return livro;
 	}
 

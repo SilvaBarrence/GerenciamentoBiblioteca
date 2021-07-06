@@ -15,8 +15,9 @@ public class EditoraModel {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	@NotNull @NotEmpty
+
+	@NotNull
+	@NotEmpty
 	private String nome;
 
 	@Override
@@ -54,7 +55,7 @@ public class EditoraModel {
 		return nome;
 	}
 
-	public void setNome( String editora) {
+	public void setNome(String editora) {
 		this.nome = editora;
 	}
 

@@ -9,22 +9,26 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import com.apirest.bibliotecavirtual.repository.LivroRepository;
-
 @Entity
-@Table(name="LIVROS")
+@Table(name = "LIVROS")
 public class LivroModel {
 
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	@NotNull @NotEmpty
-	private String autor;
-	
-	@NotNull @NotEmpty @ManyToOne
-	private  EditoraModel editora;
-	
-	@NotNull @NotEmpty
+
+	@NotNull
+	@NotEmpty
+	@ManyToOne
+	private AutorModel autor;
+
+	@NotNull
+	@NotEmpty
+	@ManyToOne
+	private EditoraModel editora;
+
+	@NotNull
+	@NotEmpty
 	private String titulo;
 
 	@Override
@@ -70,11 +74,11 @@ public class LivroModel {
 		return true;
 	}
 
-	public String getAutor() {
+	public AutorModel getAutor() {
 		return autor;
 	}
 
-	public void setAutor(String autor) {
+	public void setAutor(AutorModel autor) {
 		this.autor = autor;
 	}
 
@@ -97,15 +101,5 @@ public class LivroModel {
 	public Long getId() {
 		return id;
 	}
-	
-	public LivroModel atualizar(long id, LivroRepository livroRepository) {
-		LivroModel livro = livroRepository.getOne(id);
-		livro.setAutor(this.autor);
-		livro.setEditora(this.editora);
-		livro.setTitulo(this.titulo);
-
-		return livro;
-	}
-
 
 }

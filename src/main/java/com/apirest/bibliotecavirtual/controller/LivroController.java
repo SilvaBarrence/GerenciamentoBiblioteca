@@ -21,7 +21,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.apirest.bibliotecavirtual.controller.Dto.LivroDto;
 import com.apirest.bibliotecavirtual.models.LivroModel;
-import com.apirest.bibliotecavirtual.repository.EditoraRepository;
 import com.apirest.bibliotecavirtual.repository.LivroRepository;
 
 @RestController
@@ -30,10 +29,6 @@ public class LivroController {
 
 	@Autowired
 	private LivroRepository livroRepository;
-	
-	@Autowired
-	private EditoraRepository editoraRepository;
-
 
 	@GetMapping
 	public List<LivroModel> obterLivros() {
@@ -42,7 +37,7 @@ public class LivroController {
 
 	@GetMapping("/busca/autor/{autor}")
 	public List<LivroModel> obterLivroPorAutor(@PathVariable String autor) {
-		return livroRepository.findByAutor(autor);
+		return livroRepository.findByAutorNome(autor);
 	}
 
 	@GetMapping("/busca/editora/{editora}")
@@ -56,7 +51,7 @@ public class LivroController {
 		if (optional.isPresent()) {
 			return ResponseEntity.ok(optional.get());
 		} else {
-			return ResponseEntity.notFound().build();	
+			return ResponseEntity.notFound().build();
 		}
 	}
 
@@ -72,8 +67,7 @@ public class LivroController {
 
 	@PutMapping("/alterar/{id}")
 	@Transactional
-	public ResponseEntity<LivroModel> alterarLivro(@PathVariable long id,
-			@RequestBody @Valid LivroDto atualizaLivro) {
+	public ResponseEntity<LivroModel> alterarLivro(@PathVariable long id, @RequestBody @Valid LivroDto atualizaLivro) {
 		Optional<LivroModel> optional = livroRepository.findById(id);
 		if (optional.isPresent()) {
 			LivroModel livroAtualizado = atualizaLivro.atualizar(id, livroRepository);
@@ -85,7 +79,8 @@ public class LivroController {
 
 	@PostMapping("/salvar")
 	@Transactional
-	public ResponseEntity<LivroModel> salvarLivro(@RequestBody @Valid LivroModel livro, UriComponentsBuilder builder) {
+	public ResponseEntity<LivroModel> salvarLivro(@RequestBody @Valid LivroModel livro, @RequestBody long id,
+			UriComponentsBuilder builder) {
 		livroRepository.save(livro);
 		URI uri = builder.path("/v1/livro/salvar/{id}").buildAndExpand(livro.getId()).toUri();
 		return ResponseEntity.created(uri).body(livro);

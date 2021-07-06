@@ -8,7 +8,8 @@ import com.apirest.bibliotecavirtual.repository.EditoraRepository;
 
 public class EditoraDto {
 
-	@NotNull @NotEmpty
+	@NotNull
+	@NotEmpty
 	private String nome;
 
 	public String getNome() {
@@ -25,6 +26,5 @@ public class EditoraDto {
 
 		return editora;
 	}
-	
-	
+
 }
